@@ -19,7 +19,7 @@ public class DeliveryCard {
 
     @BeforeEach
     void setUp() {
-        open("http://localhost:9999");
+        open("http://localhost:9999/");
     }
 
     @Test
@@ -38,6 +38,17 @@ public class DeliveryCard {
         $("[data-test-id='agreement']").click();
         $("button.button").click();
         $(".notification__content").shouldBe(visible, Duration.ofSeconds(15)).
-                shouldHave(text("Встреча успешно забронирована на " + firstMeetingDate));
+                shouldHave(text("Встреча успешно запланирована на " + firstMeetingDate));
+
+        //Перепланирование встречи
+        $("[data-test-id='date'] input").doubleClick().sendKeys(Keys.DELETE);
+        $("[data-test-id='date'] input").setValue(secondMeetingDate);
+        $("button.button").click();
+        $("[data-test-id=replan-notification] .notification__content").
+                shouldBe(visible,Duration.ofSeconds(15)).
+                shouldHave(text("У вас уже запланирована встреча на другую дату. Перепланировать?"));
+        $("[data-test-id= replan-notification] button").click();
+        $(".notification__content").shouldBe(visible, Duration.ofSeconds(15)).
+                shouldHave(text("Встреча успешно запланирована на " + secondMeetingDate));
     }
 }

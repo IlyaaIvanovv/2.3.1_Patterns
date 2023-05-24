@@ -40,7 +40,11 @@ public class DataGenerator {
     public static String generatePhone(String locale) {
         Locale localeRu = new Locale("ru");
         Faker faker = new Faker(localeRu);
-        String phone = faker.phoneNumber().phoneNumber();
+        String phone = faker.phoneNumber().phoneNumber().
+                replace("(","").
+                replace(")","").
+                replace("-","").
+                replace("-","");
         return phone;
     }
 
